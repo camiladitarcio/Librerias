@@ -1,64 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "actores.h"
-#include "peliculas.h"
+#include "musicos.h"
+#include "orquesta.h"
+#include "instrumentos.h"
 #include "utn.h"
-#define QTY_PELICULAS 1000
-#define QTY_ACTORES 50
+#include "informes.h"
+#define QTY_MUSICOS 1000
+#define QTY_ORQUESTAS 50
+#define QTY_INSTRUMENTOS 20
 
 int main()
 {
 
-int opcion;
-    int contadorIdPeliculas=1000;
-    Peliculas arrayPeliculas[QTY_PELICULAS];
-    Actores arrayActores[QTY_ACTORES];
-    //int contadorIdPeliculas=5;
-    //inicializarPeliculasConDatos(arrayPeliculas,QTY_PELICULAS); //INICIALIZA PeliculasS CON DATOS YA CARGADOS
+    int opcion;
+    Musicos arrayMusicos[QTY_MUSICOS];
+    Orquesta arrayOrquesta[QTY_ORQUESTAS];
+    Instrumentos arrayInstrumentos[QTY_INSTRUMENTOS];
+    int contadorIdOrquesta=0;
+    int contadorIdMusicos=0;
+    int contadorIdInstrumentos=0;
 
-    Peliculas_Inicializar(arrayPeliculas,QTY_PELICULAS);
-    inicializarActoresConDatos(arrayActores,QTY_ACTORES);
+    //musicos_Inicializar(arrayMusicos,QTY_MUSICOS);
+    //orquesta_Inicializar(arrayOrquesta,QTY_ORQUESTAS);
+    //instrumentos_Inicializar(arrayInstrumentos,QTY_INSTRUMENTOS);
+    inicializarOrquestaConDatos(arrayOrquesta,QTY_ORQUESTAS,&contadorIdOrquesta);
+    inicializarMusicosConDatos(arrayMusicos,QTY_MUSICOS,&contadorIdMusicos);
+    inicializarInstrumentosConDatos(arrayInstrumentos,QTY_INSTRUMENTOS,&contadorIdInstrumentos);
+
     do
     {
-        utn_getUnsignedInt("\n\n1) Alta \n2) Modificar \n3) Baja \n4) Listar \n5) Ordenar \n6) Informar\n \n7) Salir\n",
-                      "\n-- ERROR --",1,sizeof(int),1,7,1,&opcion);
+        utn_getUnsignedInt("\n1)Agregar Orquestas \n2)Eliminar Orquestas \n3)Imprimir Orquestas"
+                            "\n4)Agregar Musico \n5)Modificar Musico \n6)Eliminar Musico \n7)Imprimir Musicos"
+                            "\n8)Agregar Instrumentos \n9)Imprimir Instrumentos",
+                            "\n-- ERROR --",1,sizeof(int),1,7,1,&opcion);
         switch(opcion)
         {
-            case 1: //Alta
-                Actores_listar(arrayActores,QTY_ACTORES);
-                Peliculas_alta(arrayPeliculas,QTY_PELICULAS,&contadorIdPeliculas, arrayActores, 50);
+            case 1: //Alta Orquesta
+                orquesta_alta(arrayOrquesta,QTY_ORQUESTAS,&contadorIdOrquesta);
                 break;
 
-            case 2: //Modificar
-                Peliculas_modificar(arrayPeliculas,QTY_PELICULAS, arrayActores, 50);
+            case 2: //Eliminar Orquesta
+                orquesta_baja(arrayOrquesta,QTY_ORQUESTAS);
                 break;
 
-            case 3: //Baja
-                Peliculas_baja(arrayPeliculas,QTY_PELICULAS);
+            case 3: //Imprimir Orquesta
+                orquesta_listar(arrayOrquesta,contadorIdOrquesta);
                 break;
 
-            case 4://Listar
-                Peliculas_listar(arrayPeliculas,QTY_PELICULAS);
+            case 4://Agregar Musico
+                orquesta_listar(arrayOrquesta,contadorIdOrquesta);
+                instrumentos_listar(arrayInstrumentos,contadorIdInstrumentos);
+                musicos_alta(arrayMusicos,QTY_MUSICOS,&contadorIdMusicos,arrayOrquesta,contadorIdOrquesta,
+                arrayInstrumentos,contadorIdInstrumentos);
                 break;
 
-            case 5://Ordenar
-                Peliculas_ordenarPorString(arrayPeliculas,QTY_PELICULAS);
-                Actores_ordenarPorString(arrayActores, QTY_ACTORES);
+            case 5://Modificar Musicos
+                musicos_listar(arrayMusicos,QTY_MUSICOS, arrayOrquesta,arrayInstrumentos);
+                musicos_modificar(arrayMusicos,QTY_MUSICOS);
                 break;
 
-            case 6:
-                Peliculas_listar(arrayPeliculas,QTY_PELICULAS);
-                Actores_listar(arrayActores,QTY_ACTORES);
-                Peliculas_buscarPorPais(arrayPeliculas,QTY_PELICULAS,"Estados Unidos");
+            case 6://Baja Musicos
+                musicos_listar(arrayMusicos,QTY_MUSICOS, arrayOrquesta,arrayInstrumentos);
+                musicos_baja(arrayMusicos,QTY_MUSICOS);
                 break;
 
-            case 7://Salir
+            case 7://Listar Musicos
+                musicos_listar(arrayMusicos,QTY_MUSICOS, arrayOrquesta,arrayInstrumentos);
                 break;
+
+            case 8://Agregar Instrumento
+                instrumentos_alta(arrayInstrumentos,QTY_INSTRUMENTOS,&contadorIdInstrumentos);
+                break;
+
+            case 9:
+                instrumentos_listar(arrayInstrumentos,contadorIdInstrumentos);
+                Informes_listarMayorCantidad(arrayOrquesta,QTY_ORQUESTAS);
+                break;
+
             default:
                 printf("\nOpcion no valida");
         }
     }
-    while(opcion!=7);
+    while(opcion!=10);
     return 0;
 }
 
