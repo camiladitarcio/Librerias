@@ -577,3 +577,4 @@ int isValidChar(char charRecibido)
         retorno=0;
     return retorno;
 }
+
